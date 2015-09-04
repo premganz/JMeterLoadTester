@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <actions/>
+  <description>LoadTester demo</description>
+  <logRotator class="hudson.tasks.LogRotator">
+    <daysToKeep>10</daysToKeep>
+    <numToKeep>10</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties/>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <jdk>jdk7</jdk>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.BatchFile>
+      <command>del *.*    /Q
+xcopy C:\Users\me\JMeterLoadTester\* .  /e /y
+del target   /Q</command>
+    </hudson.tasks.BatchFile>
+    <hudson.tasks.Maven>
+      <targets>clean verify</targets>
+      <usePrivateRepository>false</usePrivateRepository>
+      <settings class="jenkins.mvn.DefaultSettingsProvider"/>
+      <globalSettings class="jenkins.mvn.DefaultGlobalSettingsProvider"/>
+    </hudson.tasks.Maven>
+  </builders>
+  <publishers>
+    <hudson.plugins.performance.PerformancePublisher plugin="performance@1.13">
+      <errorFailedThreshold>15</errorFailedThreshold>
+      <errorUnstableThreshold>10</errorUnstableThreshold>
+      <errorUnstableResponseTimeThreshold></errorUnstableResponseTimeThreshold>
+      <relativeFailedThresholdPositive>0.0</relativeFailedThresholdPositive>
+      <relativeFailedThresholdNegative>0.0</relativeFailedThresholdNegative>
+      <relativeUnstableThresholdPositive>0.0</relativeUnstableThresholdPositive>
+      <relativeUnstableThresholdNegative>0.0</relativeUnstableThresholdNegative>
+      <nthBuildNumber>0</nthBuildNumber>
+      <modeRelativeThresholds>false</modeRelativeThresholds>
+      <configType>ART</configType>
+      <modeOfThreshold>false</modeOfThreshold>
+      <compareBuildPrevious>false</compareBuildPrevious>
+      <xml></xml>
+      <modePerformancePerTestCase>true</modePerformancePerTestCase>
+      <parsers>
+        <hudson.plugins.performance.JMeterParser>
+          <glob>**/*Hi1.jtl</glob>
+        </hudson.plugins.performance.JMeterParser>
+        <hudson.plugins.performance.JmeterSummarizerParser>
+          <glob>**/*Hi1.log</glob>
+          <logDateFormat>yyyy/mm/dd HH:mm:ss</logDateFormat>
+        </hudson.plugins.performance.JmeterSummarizerParser>
+      </parsers>
+      <modeThroughput>true</modeThroughput>
+    </hudson.plugins.performance.PerformancePublisher>
+  </publishers>
+  <buildWrappers/>
+</project>
